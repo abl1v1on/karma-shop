@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 
 from wish_list.models import WishList
@@ -11,7 +11,7 @@ def index(request):
     context = {
         'title': 'Главная страница',
         'latest_products': service.get_latest_products(),
-        'sale_products': service.get_sale_products()
+        'sale_products': service.get_sale_products(),
     }
     return render(request, 'index.html', context)
 
@@ -42,3 +42,4 @@ class ProductCatalogView(ListView):
         context['brands'] = service.get_all_brands()
         context['colors'] = service.get_all_colors()
         return context
+

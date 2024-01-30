@@ -10,7 +10,8 @@ urlpatterns = [
     path('', views.index, name='home'),
     path('product/', include('product.urls', namespace='product')),
     path('user/', include('users.urls', namespace='user')),
-    path('wish-list/', include('wish_list.urls', namespace='wish_list'))
+    path('wish-list/', include('wish_list.urls', namespace='wish_list')),
+    path('newsletter/', include('newsletter.urls', namespace='newsletter'))
 ]
 
 if settings.DEBUG:
