@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 
 from wish_list.models import WishList
@@ -24,8 +24,14 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.object.title
-        context['is_wish_list'] = WishList.objects.filter(user_id=self.request.user.id,
-                                                          product_id=self.object.id).exists
+
+        try:
+            if self.request.session['wish_list']:
+                pk_list = [i['id'] for i in self.request.session['wish_list']]
+                context['is_in_wish_list'] = True if self.object.pk in pk_list else False
+        except Exception as e:
+            print(e)
+            context['is_in_wish_list'] = False
         return context
 
 
@@ -42,4 +48,3 @@ class ProductCatalogView(ListView):
         context['brands'] = service.get_all_brands()
         context['colors'] = service.get_all_colors()
         return context
-

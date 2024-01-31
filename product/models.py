@@ -20,7 +20,7 @@ class Product(models.Model):
                               related_name='product_brand', verbose_name='Бренд')
     slug = models.SlugField(max_length=70, unique=True, db_index=True, verbose_name='URL')
     is_sale = models.BooleanField(default=False)
-    product_pic = models.ImageField(upload_to='product_pic/%Y', verbose_name='Изображение')
+
     color = models.ForeignKey('Color', on_delete=models.CASCADE,
                               related_name='product_color', verbose_name='Цвет')
 
@@ -33,6 +33,19 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ProductImages(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,
+                                related_name='product_images', verbose_name='Продукт')
+    image = models.ImageField(upload_to='product_images/%Y', verbose_name='Изображение')
+
+    class Meta:
+        verbose_name = 'Изображение'
+        verbose_name_plural = 'Изображения'
+
+    def __str__(self):
+        return str(self.image)
 
 
 class Category(models.Model):

@@ -191,7 +191,7 @@
 					{% for product in latest_products %}
 					<div class="col-lg-3 col-md-6">
 						<div class="single-product">
-							<img class="img-fluid" src="{{ product.product_pic.url }}" alt="">
+							<img class="img-fluid" src="/media/{{ product.product_images.all.0 }}" alt="">
 							<div class="product-details">
 								<h6>{{ product.title }}</h6>
 								<div class="price">
@@ -541,7 +541,7 @@
 						<!-- single exclusive carousel -->
 						{% for product in sale_products %}
 						<div class="single-exclusive-slider">
-							<img class="img-fluid" src="{{ product.product_pic.url }}" alt="">
+							<img class="img-fluid" src="/media/{{ product.product_images.all.0 }}" alt="">
 							<div class="product-details">
 								<div class="price">
 									<h6>{{ product.new_price }} руб.</h6>

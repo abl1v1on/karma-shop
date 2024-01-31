@@ -28,20 +28,16 @@
 			<div class="row s_product_inner">
 				<div class="col-lg-6">
 					<div class="s_Product_carousel">
+						{% for i in product.product_images.all %}
 						<div class="single-prd-item">
-							<img class="img-fluid" src="{{ product.product_pic.url }}" alt="">
+							<img class="img-fluid" src="/media/{{ i }}" alt="">
 						</div>
-						<div class="single-prd-item">
-							<img class="img-fluid" src="img/category/s-p1.jpg" alt="">
-						</div>
-						<div class="single-prd-item">
-							<img class="img-fluid" src="img/category/s-p1.jpg" alt="">
-						</div>
+						{% endfor %}
 					</div>
 				</div>
 				<div class="col-lg-5 offset-lg-1">
 					<div class="s_product_text">
-						<h3>{{ product.title }}</h3>
+						<h3 id="product_title">{{ product.title }}</h3>
 						<h2>{{ product.new_price }} руб.</h2>
 						<ul class="list">
 							<li><a class="active" href="#"><span>Категория</span> : {{ product.category }}</a></li>
@@ -58,11 +54,16 @@
 						</div>
 						<div class="card_area d-flex align-items-center">
 							<a class="primary-btn" href="#">Добавить в корзину</a>
-							<a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
-							{% if not is_wish_list %}
-							<a class="icon_btn" href="{% url 'wish_list:add_item' product.slug %}"><i class="lnr lnr lnr-heart"></i></a>
+							{% if is_in_wish_list %}
+							<form action="{% url 'wish_list:remove_item' product.pk %}" method="post">
+								{% csrf_token %}
+								<button class="btn" type="submit">Удалить из избранного</button>
+							</form>
 							{% else %}
-							<a class="icon_btn" href="{% url 'wish_list:remove_item' product.slug %}"><i class="lnr lnr lnr-trash"></i></a>
+							<form action="{% url 'wish_list:add_item' product.pk %}" method="post">
+								{% csrf_token %}
+								<button class="btn" type="submit">В избранное</button>
+							</form>
 							{% endif %}
 						</div>
 					</div>

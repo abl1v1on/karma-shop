@@ -105,8 +105,9 @@
 						<!-- single product -->
 						{% for product in products %}
 						<div class="col-lg-4 col-md-6">
+<!--							{{ product.product_images.all.0 }}-->
 							<div class="single-product">
-								<img class="img-fluid" src="{{ product.product_pic.url }}" alt="">
+								<img class="img-fluid" src="/media/{{ product.product_images.all.0 }}" alt="{{ product.product_pic.all.1 }}">
 								<div class="product-details">
 									<h6>{{ product.title }}</h6>
 									<div class="price">

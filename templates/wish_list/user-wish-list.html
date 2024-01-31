@@ -36,20 +36,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for product in user.user_wish_list.all %}
+                            {% if wish_list %}
+                            {% for product in wish_list %}
                             <tr>
                                 <td>
                                     <div class="media">
                                         <div class="d-flex">
-                                            <img src="{{ product.product.product_pic.url }}" width="140px" alt="">
+                                            <img src="/media/{{ product.product_images.all.0 }}" width="140px" alt="">
                                         </div>
                                         <div class="media-body">
-                                            <p>{{ product.product.title }}</p>
+                                            <p>{{ product.title }}</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <h5>{{ product.product.new_price }} руб.</h5>
+                                    <h5>{{ product.new_price }} руб.</h5>
                                 </td>
                                 <td>
                                     <div class="product_count">
@@ -62,10 +63,17 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <h5>{{ product.product.new_price }} руб.</h5>
+                                    <h5>{{ product.new_price }} руб.</h5>
                                 </td>
                             </tr>
                             {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td>
+                                    <h5>Список желаемого пуст</h5>
+                                </td>
+                            </tr>
+                            {% endif %}
                             <tr class="bottom_button">
                                 <td>
                                     <a class="gray_btn" href="#">Update Cart</a>
