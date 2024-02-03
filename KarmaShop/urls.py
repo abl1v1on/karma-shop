@@ -11,7 +11,9 @@ urlpatterns = [
     path('product/', include('product.urls', namespace='product')),
     path('user/', include('users.urls', namespace='user')),
     path('wish-list/', include('wish_list.urls', namespace='wish_list')),
-    path('newsletter/', include('newsletter.urls', namespace='newsletter'))
+    path('newsletter/', include('newsletter.urls', namespace='newsletter')),
+
+    path('api/v1/product-list/', views.ProductListApiView.as_view(), name='api_product_list')
 ]
 
 if settings.DEBUG:

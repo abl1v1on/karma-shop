@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
+from rest_framework.generics import ListAPIView
 
 from wish_list.models import WishList
-from . import service
+from . import service, serializers
 from .models import Product
 
 
@@ -48,3 +49,8 @@ class ProductCatalogView(ListView):
         context['brands'] = service.get_all_brands()
         context['colors'] = service.get_all_colors()
         return context
+
+
+class ProductListApiView(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = serializers.ProductSerializer

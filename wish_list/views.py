@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
@@ -23,6 +24,7 @@ def show_user_wish_list(request, pk):
                 wish_list_products.append(product)
 
     except Exception as ex:
+        print(ex)
         wish_list_products = []
 
     context = {
@@ -53,42 +55,29 @@ def add_to_wish_list(request, pk):
         if not item_exists:
             request.session['wish_list'].append(app_data)
             request.session.modified = True  # Указываем, что сессия была изменена
+
     return redirect(reverse('product:product_detail', kwargs={'slug': Product.objects.get(pk=pk).slug}))
 
 
 def remove_from_wish_list(request, pk):
-    if request.method == 'POST':
-        for i in request.session['wish_list']:  # Пробегаемся по нашему списку из добавленный товаров
-            if i['id'] == pk:  # Если находим этот товар, то удаляем его
-                i.clear()
-
-        # На месте удаленных товаров остается {}, поэтому их тоже нужно удалить
-        while {} in request.session['wish_list']:
-            request.session['wish_list'].remove({})
-
-        # Тут мы проверяем, есть ли вообще у нас ключ wish_list в сессиях
-        if not request.session['wish_list']:
-            del request.session['wish_list']
-
-        request.session.modified = True
+    # if request.method == 'POST':
+    #     for i in request.session['wish_list']:  # Пробегаемся по нашему списку из добавленный товаров
+    #         if i['id'] == pk:  # Если находим этот товар, то удаляем его
+    #             i.clear()
+    #
+    #     # На месте удаленных товаров остается {}, поэтому их тоже нужно удалить
+    #     while {} in request.session['wish_list']:
+    #         request.session['wish_list'].remove({})
+    #
+    #     # Тут мы проверяем, есть ли вообще у нас ключ wish_list в сессиях
+    #     if not request.session['wish_list']:
+    #         del request.session['wish_list']
+    #
+    #     request.session.modified = True
+    service.WishListService(request.session.get('wish_list'), request).remove(pk)
     return redirect(reverse('product:product_detail', kwargs={'slug': Product.objects.get(pk=pk).slug}))
 
 
-@login_required
-def add_product_in_wish_list(request, slug):
-    product = get_object_or_404(Product, slug=slug)
-
-    if service.check_item(request.user.id, product.id):
-        return redirect('home')
-    service.add_item_in_wish_list(request.user.id, product.id)
-    return redirect(reverse('product:product_detail', kwargs={'slug': product.slug}))
-
-
-@login_required
-def remove_product_from_wish_list(request, slug):
-    product = get_object_or_404(Product, slug=slug)
-
-    if not service.check_item(request.user.id, product.id):
-        return redirect('home')
-    service.remove_item_from_wish_list(request.user.id, product.id)
-    return redirect(reverse('product:product_detail', kwargs={'slug': product.slug}))
+def wish_list_api(request):
+    return JsonResponse(request.session.get('wish_list'), safe=False)
+    
