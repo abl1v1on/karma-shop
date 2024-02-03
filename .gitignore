@@ -9,3 +9,4 @@ venv/
 celerybeat.pid
 celerybeat-schedule
 settings.py
+templates
